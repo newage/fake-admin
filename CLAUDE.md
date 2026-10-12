@@ -61,6 +61,7 @@ $NODE sh -c "npm run lint && npx vitest run && npm run build"   # повний �
 
 Нотатки:
 - Frontend: refresh-токен у localStorage, access у памʼяті (`frontend/src/lib/session.ts`); усі запити через `lib/api-client.ts` (одноразовий refresh при 401). Стан таблиці датчиків живе в URL (`features/sensors/search.ts`). Роль із claims лише ховає пункти меню, права визначає сервер (403). CSP задано в `docker/nginx/default.conf`.
+- Frontend i18n (`uk`, `pl`; i18next): реєстр мов — `frontend/src/lib/i18n/languages.ts`, переклади — `lib/i18n/locales/<code>.json`. Додати мову = новий JSON + запис у реєстрі (набори ключів мають збігатися, перевіряє тест). Мова: localStorage → `navigator.languages` → `uk`; перемикач — `components/language-switcher.tsx`. Тексти — лише через `t()` (zod-схеми повертають ключі), дати — `useDateFormatter()`; тести стартують з `uk` (`src/test/setup.ts`).
 - Behat 4: конфіг лише `backend/behat.php` (YAML не підтримується), кроки описуються PHP-атрибутами `#[When]`/`#[Then]`. Без `--no-interaction` на невизначених кроках чекає введення й зависає.
 - PHPUnit-тести БД працюють у `fake_admin_test` (створюється разом із томом mysql-data); Behat — у dev-БД `fake_admin`, свої дані створює з доменом `@behat.test` / кодами `BHT-` і прибирає.
 - Auth: `league/oauth2-server` через `mezzio-authentication-oauth2`; репозиторії в `backend/src/App/Auth/Repository/`. RBAC: права маршруту — `->setOptions(['permission' => '…'])` у `config/routes.php` і рядок у `role_permissions`; маршрут без `permission` закритий (403).

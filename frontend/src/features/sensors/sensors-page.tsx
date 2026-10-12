@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import {
   flexRender,
@@ -7,8 +7,10 @@ import {
   type ColumnDef,
   type SortingState,
 } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 import { Activity, ArrowDown, ArrowUp, ArrowUpDown, SlidersHorizontal } from 'lucide-react'
 import { ApiError } from '@/lib/api-client'
+import { useDateFormatter } from '@/lib/i18n'
 import type { Sensor } from '@/lib/api-types'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -26,33 +28,41 @@ import {
 } from './search'
 import { useSensors } from './use-sensors'
 
-const dateTime = new Intl.DateTimeFormat('uk-UA', { dateStyle: 'short', timeStyle: 'short' })
-const formatDate = (iso: string | null) => (iso ? dateTime.format(new Date(iso)) : '—')
-
-const columns: ColumnDef<Sensor>[] = [
-  { accessorKey: 'code', header: 'Код' },
-  { accessorKey: 'name', header: 'Назва' },
-  { accessorKey: 'type', header: 'Тип', enableSorting: false },
-  { accessorKey: 'location', header: 'Розташування', enableSorting: false },
-  {
-    accessorKey: 'status',
-    header: 'Статус',
-    enableSorting: false,
-    cell: ({ getValue }) => (
-      <span className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs text-accent-foreground">
-        <span className="size-1.5 rounded-full bg-accent-foreground" aria-hidden />
-        {String(getValue())}
-      </span>
-    ),
-  },
-  { accessorKey: 'created_at', header: 'Створено', cell: ({ getValue }) => formatDate(getValue<string>()) },
-  {
-    accessorKey: 'last_seen_at',
-    header: 'Останній сигнал',
-    enableSorting: false,
-    cell: ({ getValue }) => formatDate(getValue<string | null>()),
-  },
-]
+function useColumns(): ColumnDef<Sensor>[] {
+  const { t } = useTranslation()
+  const formatDate = useDateFormatter()
+  return useMemo(
+    () => [
+      { accessorKey: 'code', header: t('sensors.columns.code') },
+      { accessorKey: 'name', header: t('sensors.columns.name') },
+      { accessorKey: 'type', header: t('sensors.columns.type'), enableSorting: false },
+      { accessorKey: 'location', header: t('sensors.columns.location'), enableSorting: false },
+      {
+        accessorKey: 'status',
+        header: t('sensors.columns.status'),
+        enableSorting: false,
+        cell: ({ getValue }) => (
+          <span className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs text-accent-foreground">
+            <span className="size-1.5 rounded-full bg-accent-foreground" aria-hidden />
+            {String(getValue())}
+          </span>
+        ),
+      },
+      {
+        accessorKey: 'created_at',
+        header: t('sensors.columns.created_at'),
+        cell: ({ getValue }) => formatDate(getValue<string>()),
+      },
+      {
+        accessorKey: 'last_seen_at',
+        header: t('sensors.columns.last_seen_at'),
+        enableSorting: false,
+        cell: ({ getValue }) => formatDate(getValue<string | null>()),
+      },
+    ],
+    [t, formatDate],
+  )
+}
 
 type TextFilter = 'name' | 'code'
 
@@ -68,6 +78,7 @@ function PrefixFilter({
   value: string | undefined
   onCommit: (field: TextFilter, value: string | undefined) => void
 }) {
+  const { t } = useTranslation()
   const [draft, setDraft] = useState(value ?? '')
   const committed = useRef(value)
 
@@ -98,12 +109,12 @@ function PrefixFilter({
         id={`filter-${field}`}
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
-        placeholder={`Від ${MIN_FILTER_LENGTH} символів`}
+        placeholder={t('sensors.filters.placeholder', { count: MIN_FILTER_LENGTH })}
         aria-describedby={short ? `filter-${field}-hint` : undefined}
       />
       {short && (
         <p id={`filter-${field}-hint`} className="text-xs text-muted-foreground">
-          Мінімум {MIN_FILTER_LENGTH} символи
+          {t('sensors.filters.min', { count: MIN_FILTER_LENGTH })}
         </p>
       )}
     </div>
@@ -111,6 +122,8 @@ function PrefixFilter({
 }
 
 export function SensorsPage({ params }: { params: SensorSearchParams }) {
+  const { t } = useTranslation()
+  const columns = useColumns()
   const search = resolveSensorSearch(params)
   const navigate = useNavigate({ from: '/sensors' })
   const query = useSensors(search)
@@ -160,7 +173,7 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-medium">Датчики</h1>
+      <h1 className="text-3xl font-medium">{t('sensors.title')}</h1>
 
       <Card className="p-[var(--space-card)]">
         <div className="mb-5 flex items-center justify-between">
@@ -168,17 +181,17 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
             <span className="grid size-8 place-items-center rounded-md bg-accent text-accent-foreground">
               <SlidersHorizontal className="size-4" aria-hidden />
             </span>
-            <h2 className="text-xl">Фільтри</h2>
+            <h2 className="text-xl">{t('sensors.filters.title')}</h2>
           </div>
           <Button variant="link" size="sm" onClick={resetFilters} disabled={!filtered}>
-            Очистити все
+            {t('sensors.filters.clear')}
           </Button>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <PrefixFilter field="name" label="Назва" value={search.name} onCommit={commitFilter} />
-          <PrefixFilter field="code" label="Код" value={search.code} onCommit={commitFilter} />
+          <PrefixFilter field="name" label={t('sensors.filters.name')} value={search.name} onCommit={commitFilter} />
+          <PrefixFilter field="code" label={t('sensors.filters.code')} value={search.code} onCommit={commitFilter} />
           <div className="flex flex-col gap-2">
-            <Label htmlFor="filter-created_from">Створено від</Label>
+            <Label htmlFor="filter-created_from">{t('sensors.filters.created_from')}</Label>
             <Input
               id="filter-created_from"
               type="date"
@@ -187,7 +200,7 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="filter-created_to">Створено до</Label>
+            <Label htmlFor="filter-created_to">{t('sensors.filters.created_to')}</Label>
             <Input
               id="filter-created_to"
               type="date"
@@ -203,30 +216,30 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
           <span className="grid size-8 place-items-center rounded-md bg-accent text-accent-foreground">
             <Activity className="size-4" aria-hidden />
           </span>
-          <h2 className="text-xl">Список</h2>
-          {data && <span className="text-xs text-muted-foreground">Усього: {data.total}</span>}
+          <h2 className="text-xl">{t('sensors.list.title')}</h2>
+          {data && <span className="text-xs text-muted-foreground">{t('sensors.list.total', { total: data.total })}</span>}
         </div>
 
         {query.isError ? (
           <ErrorState error={query.error} onRetry={() => void query.refetch()} />
         ) : data === undefined ? (
           <p className="py-12 text-center text-muted-foreground" role="status">
-            Завантаження…
+            {t('sensors.list.loading')}
           </p>
         ) : data.total === 0 ? (
           <div className="flex flex-col items-center gap-4 py-12 text-center">
-            <p>{filtered ? 'Нічого не знайдено' : 'Датчиків ще немає'}</p>
+            <p>{filtered ? t('sensors.list.not_found') : t('sensors.list.empty')}</p>
             {filtered && (
               <Button variant="outline" onClick={resetFilters}>
-                Скинути фільтри
+                {t('sensors.list.reset_filters')}
               </Button>
             )}
           </div>
         ) : data.items.length === 0 ? (
           <div className="flex flex-col items-center gap-4 py-12 text-center">
-            <p>На цій сторінці немає записів</p>
+            <p>{t('sensors.list.page_empty')}</p>
             <Button variant="outline" onClick={() => update({ page: 1 }, { keepPage: true })}>
-              На першу сторінку
+              {t('sensors.list.first_page')}
             </Button>
           </div>
         ) : (
@@ -276,7 +289,7 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
 
             <div className="mt-5 flex flex-wrap items-center justify-between gap-4 text-sm">
               <label className="flex items-center gap-2 text-muted-foreground">
-                На сторінці
+                {t('sensors.pagination.per_page')}
                 <select
                   className="h-9 rounded-md border bg-card px-2 text-foreground"
                   value={search.page_size}
@@ -291,7 +304,7 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
               </label>
               <div className="flex items-center gap-3">
                 <span className="text-muted-foreground">
-                  Сторінка {data.page} з {pageCount}
+                  {t('sensors.pagination.page', { page: data.page, pages: pageCount })}
                 </span>
                 <Button
                   variant="outline"
@@ -299,7 +312,7 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
                   disabled={search.page <= 1}
                   onClick={() => update({ page: search.page - 1 }, { keepPage: true })}
                 >
-                  Назад
+                  {t('sensors.pagination.prev')}
                 </Button>
                 <Button
                   variant="outline"
@@ -307,7 +320,7 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
                   disabled={search.page >= pageCount}
                   onClick={() => update({ page: search.page + 1 }, { keepPage: true })}
                 >
-                  Далі
+                  {t('sensors.pagination.next')}
                 </Button>
               </div>
             </div>
@@ -319,18 +332,19 @@ export function SensorsPage({ params }: { params: SensorSearchParams }) {
 }
 
 function ErrorState({ error, onRetry }: { error: unknown; onRetry: () => void }) {
+  const { t } = useTranslation()
   if (error instanceof ApiError && error.status === 403) {
     return (
       <p role="alert" className="py-12 text-center">
-        Недостатньо прав для перегляду цієї сторінки
+        {t('sensors.errors.forbidden')}
       </p>
     )
   }
   return (
     <div role="alert" className="flex flex-col items-center gap-4 py-12 text-center">
-      <p>Не вдалося завантажити датчики</p>
+      <p>{t('sensors.errors.load_failed')}</p>
       <Button variant="outline" onClick={onRetry}>
-        Повторити
+        {t('sensors.errors.retry')}
       </Button>
     </div>
   )

@@ -4,7 +4,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider } from '@tanstack/react-router'
 import { createAppRouter } from '@/router'
 import { onSessionExpired } from '@/lib/session'
+import { initI18n } from '@/lib/i18n'
 import '@/styles/index.css'
+
+initI18n()
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } } })
 const router = createAppRouter({ queryClient })

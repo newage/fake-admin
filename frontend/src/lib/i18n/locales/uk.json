@@ -1,0 +1,70 @@
+{
+  "language": { "label": "Мова" },
+  "nav": { "section": "Розділи", "main": "Основна навігація", "sensors": "Датчики", "logout": "Вийти" },
+  "login": {
+    "title": "Вхід",
+    "subtitle": "Адмінка даних датчиків",
+    "email": "Email",
+    "password": "Пароль",
+    "submit": "Увійти"
+  },
+  "validation": {
+    "email_required": "Вкажіть email",
+    "email_invalid": "Вкажіть коректний email",
+    "password_required": "Вкажіть пароль"
+  },
+  "loginError": {
+    "password_short": "Пароль має містити щонайменше 8 символів",
+    "invalid_credentials": "Невірний email або пароль",
+    "generic": "Не вдалося увійти. Спробуйте пізніше"
+  },
+  "sensors": {
+    "title": "Датчики",
+    "columns": {
+      "code": "Код",
+      "name": "Назва",
+      "type": "Тип",
+      "location": "Розташування",
+      "status": "Статус",
+      "created_at": "Створено",
+      "last_seen_at": "Останній сигнал"
+    },
+    "filters": {
+      "title": "Фільтри",
+      "clear": "Очистити все",
+      "name": "Назва",
+      "code": "Код",
+      "created_from": "Створено від",
+      "created_to": "Створено до",
+      "placeholder_one": "Від {{count}} символу",
+      "placeholder_few": "Від {{count}} символів",
+      "placeholder_many": "Від {{count}} символів",
+      "placeholder_other": "Від {{count}} символу",
+      "min_one": "Мінімум {{count}} символ",
+      "min_few": "Мінімум {{count}} символи",
+      "min_many": "Мінімум {{count}} символів",
+      "min_other": "Мінімум {{count}} символу"
+    },
+    "list": {
+      "title": "Список",
+      "total": "Усього: {{total, number}}",
+      "loading": "Завантаження…",
+      "not_found": "Нічого не знайдено",
+      "empty": "Датчиків ще немає",
+      "reset_filters": "Скинути фільтри",
+      "page_empty": "На цій сторінці немає записів",
+      "first_page": "На першу сторінку"
+    },
+    "pagination": {
+      "per_page": "На сторінці",
+      "page": "Сторінка {{page, number}} з {{pages, number}}",
+      "prev": "Назад",
+      "next": "Далі"
+    },
+    "errors": {
+      "forbidden": "Недостатньо прав для перегляду цієї сторінки",
+      "load_failed": "Не вдалося завантажити датчики",
+      "retry": "Повторити"
+    }
+  }
+}

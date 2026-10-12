@@ -1,0 +1,70 @@
+{
+  "language": { "label": "Język" },
+  "nav": { "section": "Sekcje", "main": "Nawigacja główna", "sensors": "Czujniki", "logout": "Wyloguj" },
+  "login": {
+    "title": "Logowanie",
+    "subtitle": "Panel danych czujników",
+    "email": "Email",
+    "password": "Hasło",
+    "submit": "Zaloguj"
+  },
+  "validation": {
+    "email_required": "Podaj email",
+    "email_invalid": "Podaj poprawny email",
+    "password_required": "Podaj hasło"
+  },
+  "loginError": {
+    "password_short": "Hasło musi mieć co najmniej 8 znaków",
+    "invalid_credentials": "Nieprawidłowy email lub hasło",
+    "generic": "Nie udało się zalogować. Spróbuj później"
+  },
+  "sensors": {
+    "title": "Czujniki",
+    "columns": {
+      "code": "Kod",
+      "name": "Nazwa",
+      "type": "Typ",
+      "location": "Lokalizacja",
+      "status": "Status",
+      "created_at": "Utworzono",
+      "last_seen_at": "Ostatni sygnał"
+    },
+    "filters": {
+      "title": "Filtry",
+      "clear": "Wyczyść wszystko",
+      "name": "Nazwa",
+      "code": "Kod",
+      "created_from": "Utworzono od",
+      "created_to": "Utworzono do",
+      "placeholder_one": "Od {{count}} znaku",
+      "placeholder_few": "Od {{count}} znaków",
+      "placeholder_many": "Od {{count}} znaków",
+      "placeholder_other": "Od {{count}} znaku",
+      "min_one": "Minimum {{count}} znak",
+      "min_few": "Minimum {{count}} znaki",
+      "min_many": "Minimum {{count}} znaków",
+      "min_other": "Minimum {{count}} znaku"
+    },
+    "list": {
+      "title": "Lista",
+      "total": "Razem: {{total, number}}",
+      "loading": "Ładowanie…",
+      "not_found": "Nic nie znaleziono",
+      "empty": "Brak czujników",
+      "reset_filters": "Resetuj filtry",
+      "page_empty": "Na tej stronie nie ma wpisów",
+      "first_page": "Do pierwszej strony"
+    },
+    "pagination": {
+      "per_page": "Na stronę",
+      "page": "Strona {{page, number}} z {{pages, number}}",
+      "prev": "Wstecz",
+      "next": "Dalej"
+    },
+    "errors": {
+      "forbidden": "Brak uprawnień do wyświetlenia tej strony",
+      "load_failed": "Nie udało się załadować czujników",
+      "retry": "Ponów"
+    }
+  }
+}

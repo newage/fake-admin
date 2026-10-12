@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { i18n } from '@/lib/i18n'
 import { getAccessToken, getRefreshToken } from '@/lib/session'
 import { json, mockFetch, renderApp, sensorsPage, tokenResponse } from '@/test/utils'
 
@@ -20,6 +21,17 @@ describe('layout', () => {
 
     const nav = await screen.findByRole('navigation')
     expect(within(nav).getByRole('link', { name: 'Датчики' })).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('польською: навігація й вихід перекладені', async () => {
+    signedIn('manager')
+    localStorage.setItem('fake-admin.lang', 'pl')
+    await i18n.changeLanguage('pl')
+    renderApp('/sensors')
+
+    const nav = await screen.findByRole('navigation', { name: 'Nawigacja główna' })
+    expect(within(nav).getByRole('link', { name: 'Czujniki' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('button', { name: 'Wyloguj' })).toBeInTheDocument()
   })
 
   it('logout відкликає refresh, очищає токени і показує логін', async () => {
