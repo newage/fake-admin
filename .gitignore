@@ -1,0 +1,5 @@
+.env
+/backend/vendor/
+/backend/.phpunit.cache/
+/frontend/node_modules/
+/frontend/dist/

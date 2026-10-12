@@ -1,0 +1,37 @@
+/* Design tokens based on .agents/docs/admin-styles/ (1.png, 2.png):
+   pastel green accent, black primary buttons, large radii,
+   almost no shadows, airy density. */
+:root {
+  --background: #f5f7f6;
+  --foreground: #14181f;
+  --card: #ffffff;
+  --card-foreground: #14181f;
+  --border: #e4e8e6;
+  --muted: #eef1f0;
+  --muted-foreground: #6b7580;
+
+  --primary: #0b1220;
+  --primary-foreground: #ffffff;
+
+  --accent: #b7e4a8;
+  --accent-foreground: #1d4a14;
+  --accent-soft: #e3f4dc;
+
+  --sidebar: #e9eeec;
+  --sidebar-foreground: #1d242c;
+  --sidebar-pill: #ffffff;
+
+  --destructive: #c2410c;
+  --destructive-soft: #fdeee6;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 9999px;
+
+  --shadow-card: 0 1px 0 rgb(20 24 31 / 0.02);
+
+  --space-page: 2rem;
+  --space-card: 1.5rem;
+  --row-height: 2.75rem;
+}

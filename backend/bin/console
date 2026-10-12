@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Symfony\Component\Console\Application;
+
+chdir(dirname(__DIR__));
+require 'vendor/autoload.php';
+
+$container = require 'config/container.php';
+$config    = $container->get('config');
+
+$application = new Application('fake-admin');
+foreach ($config['console']['commands'] ?? [] as $command) {
+    $application->addCommand($container->get($command));
+}
+
+$application->run();

@@ -1,0 +1,9 @@
+/.phpcs-cache
+/.psalm-cache
+/.phpunit.cache
+/clover.xml
+/coveralls-upload.json
+/phpunit.xml
+/vendor/
+/config/development.config.php
+/config/autoload/*.local.php
